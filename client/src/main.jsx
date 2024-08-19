@@ -1,11 +1,14 @@
-import ReactDOM from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import 'bootstrap/dist/css/bootstrap.min.css'
+import React from 'react';  // Import React if necessary for JSX parsing
+import ReactDOM from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-import App from './App.jsx'
-import SearchBooks from './pages/SearchBooks'
-import SavedBooks from './pages/SavedBooks'
+import App from './App.jsx';
+import Home from './pages/Home';  // Ensure this import path is correct
+import SearchBooks from './pages/SearchBooks';
+import SavedBooks from './pages/SavedBooks';
 
+// Define the router configuration
 const router = createBrowserRouter([
   {
     path: '/',
@@ -14,15 +17,23 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <SearchBooks />
-      }, {
+        element: <Home />,  // Set Home as the index route
+      },
+      {
+        path: '/search',
+        element: <SearchBooks />,
+      },
+      {
         path: '/saved',
-        element: <SavedBooks />
-      }
-    ]
-  }
-])
+        element: <SavedBooks />,
+      },
+    ],
+  },
+]);
 
+// Render the RouterProvider with the router configuration
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <RouterProvider router={router} />
-)
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
+);

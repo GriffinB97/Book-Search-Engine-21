@@ -32,7 +32,7 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <Navbar />
-      <Outlet />
+      <Outlet />  {/* Renders the child routes */}
     </ApolloProvider>
   );
 }
