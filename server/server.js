@@ -4,7 +4,6 @@ const path = require('path');
 const db = require('./config/connection');
 const routes = require('./routes');
 
-// Import your typeDefs and resolvers
 const { typeDefs, resolvers } = require('./schema');
 
 const app = express();
@@ -13,14 +12,10 @@ const PORT = process.env.PORT || 3001;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Serve the React app's static files from the dist directory
 if (process.env.NODE_ENV === 'production') {
-  const staticPath = path.join(__dirname, '../client/dist');
-  console.log(`Serving static files from: ${staticPath}`);
-  app.use(express.static(staticPath));
+  app.use(express.static(path.join(__dirname, '../client/dist')));
 }
 
-// Set up Apollo Server
 const server = new ApolloServer({
   typeDefs,
   resolvers,
@@ -29,21 +24,12 @@ const server = new ApolloServer({
   },
 });
 
-// Apply Apollo Server middleware to the Express app
 const startApolloServer = async () => {
   await server.start();
   server.applyMiddleware({ app });
 
-  // Serve the React app for any route not handled by API
   app.get('*', (req, res) => {
-    const filePath = path.join(__dirname, '../client/dist/index.html');
-    console.log(`Attempting to serve file: ${filePath}`);
-    res.sendFile(filePath, (err) => {
-      if (err) {
-        console.error(`Error serving file: ${err.message}`);
-        res.status(500).send('An error occurred while serving the file.');
-      }
-    });
+    res.sendFile(path.join(__dirname, '../client/dist/index.html'));
   });
 
   db.once('open', () => {
